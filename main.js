@@ -391,6 +391,48 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
   });
 }
 
+  document.querySelector('.orderBtn').addEventListener('click', () => {
+    // send data to server
+    try {
+      let dataOrder = {
+        "username": 'user',
+        "size": 42,
+        "price": 100,
+        
+        "laces_color": lastClickedColor.laces.color,
+        "inside_color": lastClickedColor.inside.color,
+        "outside_1_color": lastClickedColor.outside_1.color,
+        "outside_2_color": lastClickedColor.outside_2.color,
+        "outside_3_color": lastClickedColor.outside_3.color,
+        "sole_top_color": lastClickedColor.sole_top.color,
+        "sole_bottom_color": lastClickedColor.sole_bottom.color,
+        "laces_texture": lastClickedColor.laces.texture,
+        "inside_texture": lastClickedColor.inside.texture,
+        "outside_1_texture": lastClickedColor.outside_1.texture,
+        "outside_2_texture": lastClickedColor.outside_2.texture,
+        "outside_3_texture": lastClickedColor.outside_3.texture,
+        "sole_top_texture": lastClickedColor.sole_top.texture,
+        "sole_bottom_texture": lastClickedColor.sole_bottom.texture,
+
+        "status": 'success',
+
+      };
+
+      fetch('http://localhost:3000/api/v1/sneakers/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataOrder),
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+    
+
+
 
 
   sneaker.traverse((child) => {

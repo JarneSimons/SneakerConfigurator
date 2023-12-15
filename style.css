@@ -445,9 +445,29 @@ label {
   gap: 2em;
   /* margin-top: 1.5em; */
 }
-/* 
+
 #partShoe {
   margin-top: 1em;
-} */
+  margin-bottom: 0;
+}
 
+
+#orderBtn {
+  background-color: #64F243;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 0.4em;
+  padding: 0.5em 1.5em;
+  margin-top: 5em;
+  
+}
+
+#orderBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
 
