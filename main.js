@@ -17,6 +17,11 @@ import { LoadingManager } from 'three';
 import gsap from 'gsap';
 
 
+// add socket primus
+let socket = null;
+socket = new WebSocket("ws://localhost:3000/primus");
+
+
 const draco = new DRACOLoader();
 draco.setDecoderConfig({ type: 'js' });
 draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.1/');
@@ -385,19 +390,20 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
         child.material.map = selectedTexture;
         child.material.needsUpdate = true;
         lastClickedColor[selectedPart].texture = textureName;
-        console.log(lastClickedColor);
+        // console.log(lastClickedColor);
       }
     }
   });
 }
 
-  document.querySelector('.orderBtn').addEventListener('click', () => {
+  document.querySelector('.orderBtn').addEventListener('click', async function() {
     // send data to server
     try {
       let dataOrder = {
         "username": 'user',
-        "size": 42,
+        "size": 43,
         "price": 100,
+        "email": "user.lastname@gmail.com",
         
         "laces_color": lastClickedColor.laces.color,
         "inside_color": lastClickedColor.inside.color,
@@ -418,13 +424,30 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
 
       };
 
-      fetch('http://localhost:3000/api/v1/sneakers/', {
+      const response = await fetch('http://localhost:3000/api/v1/sneakers/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(dataOrder),
       })
+    
+      if (response.ok) {
+        let data = await response.json();
+        console.log(data);
+        // console.log(data.data[0]._id);
+        console.log(data.data.sneakers._id);
+        dataOrder.action = "add";
+        dataOrder._id = data.data.sneakers._id;
+        // console.log(dataOrder);
+        socket.send(JSON.stringify(dataOrder));
+        console.log("this is dataOrder", dataOrder);
+
+          // console.log('Received _id:', data.data[0]._id);
+          // dataOrder.action = "add";
+          // dataOrder._id = data.data[0]._id;
+          // socket.send(JSON.stringify(dataOrder));
+      }
     } catch (error) {
       console.log(error);
     }

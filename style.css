@@ -50,7 +50,8 @@
 }
 
 .titleTextures{
-  margin-top: 4em;
+  /* margin-top: 2em; */
+  margin-bottom: 0;
   font-weight: 700;
   text-align: left;
   width: auto;
@@ -68,6 +69,7 @@
 
 .titleColors{
   font-weight: 700;
+  margin-bottom: 0;
 }
 #texture1{
   cursor: pointer;
@@ -447,7 +449,6 @@ label {
 }
 
 #partShoe {
-  margin-top: 1em;
   margin-bottom: 0;
 }
 
@@ -462,7 +463,7 @@ label {
   cursor: pointer;
   border-radius: 0.4em;
   padding: 0.5em 1.5em;
-  margin-top: 5em;
+  margin-top: 2em;
   
 }
 
