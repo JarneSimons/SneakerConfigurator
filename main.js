@@ -19,7 +19,7 @@ import gsap from 'gsap';
 
 // add socket primus
 let socket = null;
-socket = new WebSocket("ws://localhost:3000/primus");
+socket = new WebSocket("wss://swear-dev-back.onrender.com/primus");
 
 
 const draco = new DRACOLoader();
@@ -401,7 +401,7 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
 
       };
 
-      const response = await fetch('http://localhost:3000/api/v1/sneakers/', {
+      const response = await fetch('https://swear-dev-back.onrender.com/api/v1/sneakers/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
