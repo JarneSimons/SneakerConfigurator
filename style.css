@@ -82,7 +82,11 @@ h3 {
 }
 
 .titleTextures{
+
+  /* margin-top: 2em; */
+  margin-bottom: 0;
   margin-top: 2em;
+
   font-weight: 700;
   text-align: left;
   width: auto;
@@ -101,6 +105,7 @@ h3 {
 
 .titleColors{
   font-weight: 700;
+  margin-bottom: 0;
   margin-bottom: 0.3em;
 }
 #texture1{
@@ -485,6 +490,25 @@ label {
   /* margin-top: 1.5em; */
 }
 
+#partShoe {
+  margin-bottom: 0;
+}
+
+
+#orderBtn {
+  background-color: #64F243;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 0.4em;
+  padding: 0.5em 1.5em;
+  margin-top: 2em;
+  
+}
+
 #colorsMenu p {
   font-size: 0.8em;
 }
@@ -494,4 +518,8 @@ label {
   margin-top: 0.5em;
 } 
 
+#orderBtn:hover {
+  background-color: #000000;
+  color: #ffffff;
+}
 
