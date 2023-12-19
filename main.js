@@ -77,9 +77,6 @@ const textures = [
 ];
 
 
-
-
-
 // Orbit controls
 const controls = new OrbitControls( camera, renderer.domElement );
 controls.rotateSpeed = 0.2;
@@ -102,17 +99,7 @@ loadingManager.onLoad = function () {
 const gltfLoader = new GLTFLoader(loadingManager);
 
 
-// DRACOLoader
-// const gltfLoader = new GLTFLoader();
-// const dracoLoader = new DRACOLoader();
-// dracoLoader.setDecoderPath('/examples/jsm/libs/draco/');
-// gltfLoader.setDRACOLoader(dracoLoader);
 gltfLoader.setDRACOLoader(draco);
-
-
-
-
-
 
 
 let sneaker;
@@ -129,12 +116,6 @@ gltfLoader.load('/models/Shoe_compressed.glb', (gltf) => {
     }
   });
 
-  //add texture
-  // gltf.scene.traverse((child) => {
-  //   if (child.isMesh) {
-  //     child.material.map = texture3;
-  //   }
-  // });
   scene.add(gltf.scene);
 
   
@@ -215,9 +196,9 @@ let lastClickedColor = {
 // Add event listener for color buttons outside the loop
 colorButtons.forEach((colorButton, index) => {
   colorButton.addEventListener('click', () => {
-    console.log(`Color ${index + 1} clicked!`);
+    // console.log(`Color ${index + 1} clicked!`);
     const selectedColor = colorButton.style.backgroundColor;
-    console.log(selectedColor);
+    // console.log(selectedColor);
 
     // Assuming you have a selectedPart variable storing the currently selected shoe part
     if (selectedPart) {
@@ -235,7 +216,7 @@ colorButtons.forEach((colorButton, index) => {
 });
 textureButtons.forEach((textureButton, index) => {
   textureButton.element.addEventListener('click', () => {
-    console.log(`Texture ${index + 1} clicked!`);
+    // console.log(`Texture ${index + 1} clicked!`);
     selectedTexture = textures[index];
     if (selectedPart) {
       updateShoeTexture(selectedTexture, selectedPart, textureButton.name);
@@ -253,9 +234,6 @@ textureButtons.forEach((textureButton, index) => {
         textureButton.element.style.border = '2px solid white';
       }
 
-
-
-
     }
   });
 });
@@ -268,7 +246,7 @@ let selectedTexture = null;
 
 shoeParts.forEach((part) => {
   part.element.addEventListener('click', () => {
-    console.log(`${part.name} clicked!`);
+    // console.log(`${part.name} clicked!`);
     if (selectedPartElement) {
       selectedPartElement.style.color = 'black';
     }
@@ -356,7 +334,7 @@ shoeParts.forEach((part) => {
 });
 
 function updateShoeColor(color, partName) {
-  console.log(color, partName);
+  // console.log(color, partName);
   sneaker.traverse((child) => {
     if (child.isMesh && child.name === partName) {
       const newColor = new THREE.Color(color);
@@ -365,15 +343,15 @@ function updateShoeColor(color, partName) {
       // Store last clicked color of every shoe part in an object$
       //change rgb to hex
       const hexColor = newColor.getHexString();
-      console.log(hexColor);
+      // console.log(hexColor);
       lastClickedColor[partName].color = hexColor;
-      console.log(lastClickedColor);
+      // console.log(lastClickedColor);
     }
   });
 }
 
 function updateShoeTexture(selectedTexture, selectedPart, textureName) {
-  console.log(selectedTexture, selectedPart, textureName);
+  // console.log(selectedTexture, selectedPart, textureName);
   sneaker.traverse((child) => {
     if (child.isMesh && child.name === selectedPart) {
       const currentTexture = child.material.map;
@@ -383,14 +361,13 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
         child.material.map = null;
         child.material.needsUpdate = true;
         lastClickedColor[selectedPart].texture = 'Standard';
-        console.log(lastClickedColor);
+        // console.log(lastClickedColor);
         // change color of border to white
       } else {
         // Otherwise, set the selected texture
         child.material.map = selectedTexture;
         child.material.needsUpdate = true;
         lastClickedColor[selectedPart].texture = textureName;
-        // console.log(lastClickedColor);
       }
     }
   });
@@ -434,29 +411,26 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
     
       if (response.ok) {
         let data = await response.json();
-        console.log(data);
-        // console.log(data.data[0]._id);
-        console.log(data.data.sneakers._id);
+        // console.log(data);
+        // console.log(data.data.sneakers._id);
         dataOrder.action = "add";
         dataOrder._id = data.data.sneakers._id;
-        // console.log(dataOrder);
         socket.send(JSON.stringify(dataOrder));
-        console.log("this is dataOrder", dataOrder);
+        // console.log("this is dataOrder", dataOrder);
 
-          // console.log('Received _id:', data.data[0]._id);
-          // dataOrder.action = "add";
-          // dataOrder._id = data.data[0]._id;
-          // socket.send(JSON.stringify(dataOrder));
+        document.querySelector('.error').innerHTML = "Order successful";
+
+
+      } else {
+        document.querySelector('.error').innerHTML = "Error with order";
       }
+
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   });
 
-    
-
-
-
+  
 
   sneaker.traverse((child) => {
     child.castShadow = true;
@@ -497,8 +471,6 @@ const clock = new THREE.Clock();
 function animate() {
 	requestAnimationFrame( animate );
 
-
-  // sneaker.position.y = Math.sin(Date.now() * 0.0001) * 0.1;
   const elapsedTime = clock.getElapsedTime();
   sneaker.position.y = Math.sin(elapsedTime) * 0.03;
   
