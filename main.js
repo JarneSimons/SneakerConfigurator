@@ -13,8 +13,24 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 //import loadingManager
 import { LoadingManager } from 'three';
 
+
+//Import meshBasicMaterial
+import { MeshBasicMaterial } from 'three';
+
+
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader';
+//import TextGeometry
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
+import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader.js';
+
+
+
 //import gsap
 import gsap from 'gsap';
+import { MotionPathPlugin } from 'gsap/all';
+import { CSSPlugin } from 'gsap/all';
+gsap.registerPlugin(MotionPathPlugin, CSSPlugin);
+
 
 
 // add socket primus
@@ -103,6 +119,7 @@ gltfLoader.setDRACOLoader(draco);
 
 
 let sneaker;
+let sneakerLoad = false;
 
 //load shoe model
 gltfLoader.load('/models/Shoe_compressed.glb', (gltf) => {
@@ -123,6 +140,7 @@ gltfLoader.load('/models/Shoe_compressed.glb', (gltf) => {
   gltf.scene.rotateY(Math.PI / 2); // Math.PI represents 180 degrees
 
 
+  sneakerLoad = true;
  
 
 
@@ -192,6 +210,8 @@ let lastClickedColor = {
 
 
 };
+
+
 
 // Add event listener for color buttons outside the loop
 colorButtons.forEach((colorButton, index) => {
@@ -373,7 +393,10 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
   });
 }
 
+
+
   document.querySelector('.orderBtn').addEventListener('click', async function() {
+
     // send data to server
     try {
       let dataOrder = {
@@ -418,7 +441,27 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
         socket.send(JSON.stringify(dataOrder));
         // console.log("this is dataOrder", dataOrder);
 
+    
+
+
         document.querySelector('.error').innerHTML = "Order successful";
+
+
+        // const timeline = gsap.timeline()
+
+        const timeline = gsap.timeline({
+          onComplete: function () {
+            // After the animation is complete, add the "placed order" text
+            addPlacedOrderText();
+          },
+        });
+        
+        timeline
+        .to(sneaker.rotation, { duration: 1, y: Math.PI * 2, repeat: 1 }) // Rotate around y-axis 2 times
+        .to(sneaker.position, { duration: 4, z: 15, ease: 'power2.inOut'}) // Rotate around y-axis 5 radians
+        // addPlacedOrderText();
+      console.log(timeline)
+      timeline.play();
 
 
       } else {
@@ -428,8 +471,56 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
     } catch (error) {
       // console.log(error);
     }
+
+
   });
 
+  function addPlacedOrderText() {
+    // Load Helvetica font
+    const fontLoader = new FontLoader();
+    fontLoader.load('node_modules/three/examples/fonts/helvetiker_bold.typeface.json', (helveticaFont) => {
+      // Create a TextGeometry
+      const textGeometry = new TextGeometry('Placed Order', {
+        font: helveticaFont,
+        size: 0.3,
+        height: 0.01,
+        width: 0.03,
+      });
+  
+      // Create a MeshBasicMaterial for the text
+      const textMaterial = new MeshBasicMaterial({ color: 0x64F243 });
+  
+      // Create a mesh with the text geometry and material
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  
+      // Position the text on the cylinder
+      textMesh.position.set(-1, 0.5, 0); // Adjust the position as needed
+  
+      // Add the text mesh to the scene
+      scene.add(textMesh);
+    });
+  }
+  
+    //   // Create a TextGeometry
+    //   const textGeometry = new TextGeometry('Placed Order', {
+    //     font: helveticaFont,
+    //     size: 0.3,
+    //     height: 0.01,
+    //   });
+  
+    //   // Create a MeshBasicMaterial for the text
+    //   const textMaterial = new MeshBasicMaterial({ color: 0xffffff });
+  
+    //   // Create a mesh with the text geometry and material
+    //   const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+  
+    //   // Position the text on the cylinder
+    //   textMesh.position.set(0, -0.5, 0); // Adjust the position as needed
+  
+    //   // Add the text mesh to the scene
+    //   scene.add(textMesh);
+  //   });
+  // }
   
 
   sneaker.traverse((child) => {
@@ -437,6 +528,10 @@ function updateShoeTexture(selectedTexture, selectedPart, textureName) {
   });
 
   animate();
+
+
+
+
 
 });
 
